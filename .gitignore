@@ -1,2 +1,3 @@
 *.exe
 /.vscode
+/web-programming-assignment-1/node_modules
