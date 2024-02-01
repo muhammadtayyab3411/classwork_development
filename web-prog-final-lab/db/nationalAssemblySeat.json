@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "seat_number": 1,
+    "candidate_id": 1,
+    "votes": 20
+  },
+  {
+    "id": 2,
+    "seat_number": 1,
+    "candidate_id": 2,
+    "votes": 11
+  },
+  {
+    "id": 3,
+    "seat_number": 1,
+    "candidate_id": 3,
+    "votes": 5
+  },
+  {
+    "id": 4,
+    "seat_number": 5.432073609420019,
+    "candidate_id": 4,
+    "votes": 0
+  }
+]
