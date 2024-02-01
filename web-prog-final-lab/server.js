@@ -96,6 +96,16 @@ app.post('/winner', async (req, res) => {
   res.status(200).send(winner);
 });
 
+app.get('/overAllWinner', async (req, res) => {
+  const seats = await getSeats();
+  const candidates = await getCandidates();
+
+  const winner = seats.reduce((a, b) => (a.votes > b.votes ? a : b));
+  winner['candidate'] = candidates.find((c) => c.id === winner.candidate_id);
+
+  res.status(200).send(winner);
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
