@@ -85,11 +85,13 @@ app.post('/candidate', (req, res) => {
 });
 
 app.post('/vote', (req, res) => {
-  const { candidate_id } = req.body;
+  const { seat_number, candidate_id } = req.body;
 
   if (!candidate_id) return res.status(400).send('Invalid data');
 
-  const candidate = Candidate.find((c) => c.id === candidate_id);
+  const candidates = JSON.parse(fs.readFileSync('./db/candidate.json', 'utf8'));
+
+  const candidate = candidates.find((c) => c.id === candidate_id);
 
   if (!candidate) return res.status(400).send('Invalid candidate');
 
@@ -98,7 +100,7 @@ app.post('/vote', (req, res) => {
   );
 
   let nationalAssemblySeat = nationalAssemblySeats.find(
-    (n) => n.candidate_id === candidate_id
+    (n) => n.candidate_id === candidate_id && n.seat_number === seat_number
   );
 
   if (!nationalAssemblySeat)
@@ -114,12 +116,21 @@ app.post('/vote', (req, res) => {
   res.status(200).send(nationalAssemblySeat);
 });
 
-app.get('/winner', (req, res) => {
+app.post('/winner', (req, res) => {
+  const { seat_number } = req.body;
+
   let nationalAssemblySeats = JSON.parse(
     fs.readFileSync('./db/nationalAssemblySeat.json', 'utf8')
   );
 
-  const winner = nationalAssemblySeats.reduce((acc, curr) =>
+  const nationalAssemblySeat = nationalAssemblySeats.filter(
+    (n) => n.seat_number === seat_number
+  );
+
+  if (nationalAssemblySeat.length === 0)
+    return res.status(400).send('No seats found with the provided number');
+
+  const winner = nationalAssemblySeat.reduce((acc, curr) =>
     acc.votes > curr.votes ? acc : curr
   );
 
